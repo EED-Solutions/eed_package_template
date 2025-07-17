@@ -42,7 +42,10 @@ jobs:
           else
             git checkout -b update_eed_basic_utils
           fi
-
+      - name: Install dependencies
+        run: |
+            python -m pip install --upgrade pip
+            uv sync
       - name: Update eed_basic_utils using uv
         run: uv pip install --upgrade eed_basic_utils
 
