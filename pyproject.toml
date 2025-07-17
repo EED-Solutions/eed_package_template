@@ -7,7 +7,9 @@ authors = [
     { name = "EED85", email = "eric.brahmann@eed-solutions.de" }
 ]
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "eed-basic-utils",
+]
 
 [build-system]
 requires = ["hatchling"]
@@ -19,3 +21,6 @@ dev = [
     "pytest>=8.4.1",
     "ruff>=0.12.3",
 ]
+
+[tool.uv.sources]
+eed-basic-utils = { git = "https://github.com/EED85/eed_basic_utils" }
