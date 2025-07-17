@@ -1,0 +1,70 @@
+name: Update eed_basic_utils
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-eed-basic-utils:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+
+      - name: Install uv
+        run: pip install uv
+
+      - name: Set up git user
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Fetch all branches
+        run: git fetch --all
+
+      - name: Check if branch exists
+        id: branch_check
+        run: |
+          if git show-ref --verify --quiet refs/heads/update_eed_basic_utils; then
+            echo "branch_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "branch_exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Checkout or create branch
+        run: |
+          if [ "${{ steps.branch_check.outputs.branch_exists }}" = "true" ]; then
+            git checkout update_eed_basic_utils
+          else
+            git checkout -b update_eed_basic_utils
+          fi
+
+      - name: Update eed_basic_utils using uv
+        run: uv pip install --upgrade eed_basic_utils
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if git status --porcelain | grep .; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push changes
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git add .
+          git commit -m "Update eed_basic_utils"
+          git push origin update_eed_basic_utils
+
+      - name: Create Pull Request
+        if: steps.changes.outputs.changed == 'true' && steps.branch_check.outputs.branch_exists == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create --title "update_eed_basic_utils" --body "Update eed_basic_utils package" --base main --head update_eed_basic_utils
