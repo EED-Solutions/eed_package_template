@@ -25,6 +25,8 @@ jobs:
 
       - name: Fetch all branches
         run: git fetch --all
+      - name: list branches
+        run: git branch --list
 
       - name: Check if branch exists
         id: branch_check
