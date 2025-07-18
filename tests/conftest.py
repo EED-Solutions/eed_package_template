@@ -1,7 +1,7 @@
 from collections.abc import Iterator
+from pathlib import Path
 
 import pytest
-from pathlib import Path
 from eed_basic_utils.os import get_git_root
 
 
