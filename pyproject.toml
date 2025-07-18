@@ -22,5 +22,26 @@ dev = [
     "ruff>=0.12.3",
 ]
 
+[tool.ruff]
+# Set the maximum line length to 79.
+line-length = 79
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+]
+ignore = ["E501"]  # Line too long (let black handle this)
+
 [tool.uv.sources]
 eed-basic-utils = { git = "https://github.com/EED85/eed_basic_utils" }
