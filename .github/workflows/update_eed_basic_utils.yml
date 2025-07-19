@@ -45,10 +45,11 @@ jobs:
         run: |
           if git ls-remote --heads origin update_eed_basic_utils ; then
             echo "branch_exists=true" >> $GITHUB_OUTPUT
+            echo "branch_exists=true"
           else
             echo "branch_exists=false" >> $GITHUB_OUTPUT
+            echo "branch_exists=false"
           fi
-          echo "branch_exists=$branch_exists"
 
       - name: Checkout or create branch
         run: |
