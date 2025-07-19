@@ -11,12 +11,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GH_PAT }}
-
-      - name: Authenticate GitHub CLI
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
-        run: |
-          gh auth login --hostname github.com --with-token < /dev/null
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -83,9 +77,9 @@ jobs:
           git commit -m "Update eed_basic_utils"
           git push origin update_eed_basic_utils
 
-      - name: Create Pull Request
+      - name: create pull request
         if: steps.changes.outputs.changed == 'true' && steps.branch_check.outputs.branch_exists == 'false'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           gh pr create --title "update_eed_basic_utils" --body "Update eed_basic_utils package" --base main --head update_eed_basic_utils
