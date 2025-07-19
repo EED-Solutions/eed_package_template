@@ -43,11 +43,11 @@ jobs:
       - name: Check if branch exists
         id: branch_check
         run: |
-          if (git ls-remote --heads origin update_eed_basic_utils) {
+          if git ls-remote --heads origin update_eed_basic_utils ; then
             echo "branch_exists=true" >> $GITHUB_OUTPUT
-          } else {
+          else
             echo "branch_exists=false" >> $GITHUB_OUTPUT
-          }
+          fi
           echo "branch_exists=$branch_exists"
 
       - name: Checkout or create branch
