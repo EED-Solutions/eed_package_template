@@ -9,7 +9,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
+        with:
+          token: ${{ secrets.GH_PAT }}
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -22,29 +23,43 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      # - name: Authenticate with GitHub (git)
+      #   env:
+      #     TOKEN: ${{ secrets.GH_PAT }}
+      #   run: |
+      #     git remote set-url origin https://${TOKEN}@github.com/EED-Solutions/eed_basic_utils.git
 
       - name: Fetch all branches
         run: git fetch --all
+      - name: list branches
+        run: git branch --list
 
       - name: Check if branch exists
         id: branch_check
         run: |
-          if git show-ref --verify --quiet refs/heads/update_eed_basic_utils; then
+          if git ls-remote --heads origin update_eed_basic_utils | grep -q update_eed_basic_utils ; then
             echo "branch_exists=true" >> $GITHUB_OUTPUT
+            echo "branch_exists=true"
           else
             echo "branch_exists=false" >> $GITHUB_OUTPUT
+            echo "branch_exists=false"
           fi
 
       - name: Checkout or create branch
         run: |
           if [ "${{ steps.branch_check.outputs.branch_exists }}" = "true" ]; then
-            git checkout update_eed_basic_utils
+            git fetch && git switch update_eed_basic_utils && git pull
           else
-            git checkout -b update_eed_basic_utils
+            git switch -c update_eed_basic_utils
           fi
-
+      - name: Echo current commit id
+        run: git rev-parse HEAD
+      - name: Install dependencies
+        run: |
+            python -m pip install --upgrade pip
+            uv sync
       - name: Update eed_basic_utils using uv
-        run: uv pip install --upgrade eed_basic_utils
+        run: uv add "eed_basic_utils" --upgrade-package eed_basic_utils
 
       - name: Check for changes
         id: changes
@@ -62,9 +77,9 @@ jobs:
           git commit -m "Update eed_basic_utils"
           git push origin update_eed_basic_utils
 
-      - name: Create Pull Request
+      - name: create pull request
         if: steps.changes.outputs.changed == 'true' && steps.branch_check.outputs.branch_exists == 'false'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           gh pr create --title "update_eed_basic_utils" --body "Update eed_basic_utils package" --base main --head update_eed_basic_utils
