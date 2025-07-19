@@ -52,7 +52,7 @@ jobs:
       - name: Checkout or create branch
         run: |
           if [ "${{ steps.branch_check.outputs.branch_exists }}" = "true" ]; then
-            git checkout update_eed_basic_utils
+            git fetch && git checkout update_eed_basic_utils && git pull
           else
             git checkout -b update_eed_basic_utils
           fi
