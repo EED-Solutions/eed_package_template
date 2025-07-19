@@ -32,7 +32,7 @@ wheels = [
 [[package]]
 name = "eed-basic-utils"
 version = "1.0.0"
-source = { git = "https://github.com/EED85/eed_basic_utils#9f37bb4d90dadd2b92ddf24152f698e580d28209" }
+source = { git = "https://github.com/EED-Solutions/eed_basic_utils#24ce7030d42ab19499e995b93ba90b7fa97e45d9" }
 
 [[package]]
 name = "eed-package-template"
@@ -50,7 +50,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "eed-basic-utils", git = "https://github.com/EED85/eed_basic_utils" }]
+requires-dist = [{ name = "eed-basic-utils", git = "https://github.com/EED-Solutions/eed_basic_utils" }]
 
 [package.metadata.requires-dev]
 dev = [
