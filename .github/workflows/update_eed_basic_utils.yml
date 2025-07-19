@@ -43,18 +43,19 @@ jobs:
       - name: Check if branch exists
         id: branch_check
         run: |
-          if git show-ref --verify --quiet refs/heads/update_eed_basic_utils; then
+          if (git ls-remote --heads origin $branchName) {
             echo "branch_exists=true" >> $GITHUB_OUTPUT
-          else
+          } else {
             echo "branch_exists=false" >> $GITHUB_OUTPUT
-          fi
+          }
+          echo "branch_exists=$branch_exists"
 
       - name: Checkout or create branch
         run: |
           if [ "${{ steps.branch_check.outputs.branch_exists }}" = "true" ]; then
-            git fetch && git checkout update_eed_basic_utils && git pull
+            git fetch && git switch update_eed_basic_utils && git pull
           else
-            git checkout -b update_eed_basic_utils
+            git switch -c update_eed_basic_utils
           fi
       - name: Echo current commit id
         run: git rev-parse HEAD
