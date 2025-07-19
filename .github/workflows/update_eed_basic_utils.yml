@@ -12,6 +12,11 @@ jobs:
         with:
           token: ${{ secrets.GH_PAT }}
 
+      - name: Authenticate GitHub CLI
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          gh auth setup-git
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
