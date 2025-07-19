@@ -16,7 +16,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
-          gh auth setup-git
+          gh auth login --hostname github.com --with-token < /dev/null
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
