@@ -7,7 +7,9 @@ authors = [
     { name = "EED85", email = "eric.brahmann@eed-solutions.de" }
 ]
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "eed-basic-utils",
+]
 
 [build-system]
 requires = ["hatchling"]
@@ -40,3 +42,6 @@ select = [
     "I",
 ]
 ignore = ["E501"]  # Line too long (let black handle this)
+
+[tool.uv.sources]
+eed-basic-utils = { git = "https://github.com/EED-Solutions/eed_basic_utils" }
