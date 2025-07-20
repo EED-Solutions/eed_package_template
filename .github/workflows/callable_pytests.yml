@@ -1,0 +1,29 @@
+name: callable_pytests
+
+on:
+  workflow_call:
+
+jobs:
+  callable_pytests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install uv # https://eed-solutions.atlassian.net/wiki/spaces/ES/pages/782434388/Best+Practice+uv+package+management#Github-Actions
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          uv sync
+      - name: Run pytests
+        run: |
+          uv run pytest tests
