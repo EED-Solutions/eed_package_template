@@ -11,39 +11,24 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GH_PAT }}
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version-file: .python-version
-
-      - name: Install uv
-        run: pip install uv
-
       - name: Set up git user
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-      # - name: Authenticate with GitHub (git)
-      #   env:
-      #     TOKEN: ${{ secrets.GH_PAT }}
-      #   run: |
-      #     git remote set-url origin https://${TOKEN}@github.com/EED-Solutions/eed_basic_utils.git
-
-      - name: Fetch all branches
-        run: git fetch --all
-      - name: list branches
-        run: git branch --list
-
+      - name: Fetch and list all branches
+        run: |
+          git fetch --all
+          git branch --list
       - name: Check if branch exists
         id: branch_check
         run: |
-          if git ls-remote --heads origin update_eed_basic_utils | grep -q update_eed_basic_utils ; then
-            echo "branch_exists=true" >> $GITHUB_OUTPUT
-            echo "branch_exists=true"
-          else
-            echo "branch_exists=false" >> $GITHUB_OUTPUT
-            echo "branch_exists=false"
-          fi
+            if git ls-remote --heads origin update_eed_basic_utils | grep -q update_eed_basic_utils ; then
+              branch_exists=true
+            else
+              branch_exists=false
+            fi
+            echo "branch_exists=$branch_exists" >> $GITHUB_OUTPUT
+            echo "branch_exists=$branch_exists"
 
       - name: Checkout or create branch
         run: |
@@ -52,10 +37,15 @@ jobs:
           else
             git switch -c update_eed_basic_utils
           fi
-      - name: Echo current commit id
-        run: git rev-parse HEAD
+          commit_id=$(git rev-parse HEAD)
+          echo "commit_id = $commit_id"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
       - name: Install dependencies
         run: |
+            pip install uv
             python -m pip install --upgrade pip
             uv sync
       - name: Update eed_basic_utils using uv
