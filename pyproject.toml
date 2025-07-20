@@ -44,4 +44,4 @@ select = [
 ignore = ["E501"]  # Line too long (let black handle this)
 
 [tool.uv.sources]
-eed-basic-utils = { git = "https://github.com/EED-Solutions/eed_basic_utils" }
+eed-basic-utils = { git = "https://github.com/EED-Solutions/eed_basic_utils", tag = "1.0.0" }
