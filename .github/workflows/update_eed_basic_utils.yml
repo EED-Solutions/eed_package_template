@@ -10,7 +10,7 @@ jobs:
       - name: Get triggering user login
         id: get_user
         run: |
-          trigger_user="${{ github.triggering_actor }}""
+          trigger_user="${{ github.triggering_actor }}"
           echo "trigger_user=$trigger_user" >> $GITHUB_OUTPUT
           echo "Workflow triggered by: trigger_user"
       - name: Get base branch name
