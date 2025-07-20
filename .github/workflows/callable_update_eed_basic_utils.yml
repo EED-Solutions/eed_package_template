@@ -1,0 +1,124 @@
+name: callable_update_eed_basic_utils
+
+on:
+  workflow_call:
+    inputs:
+      package_name:
+        required: true
+        type: string
+
+jobs:
+  update-eed-basic-utils:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get triggering user login
+        id: get_user
+        run: |
+          trigger_user="${{ github.triggering_actor }}"
+          echo "trigger_user=$trigger_user" >> $GITHUB_OUTPUT
+          echo "Workflow triggered by: trigger_user"
+      - name: Get base branch name
+        id: get_base_branch
+        run: |
+          base_branch=${GITHUB_REF_NAME}
+          echo "base_branch=$base_branch" >> $GITHUB_OUTPUT
+          echo "base_branch=$base_branch"
+      - name: Set package variable
+        id: define_package_name
+        run: |
+          package="${{ inputs.package_name }}"
+          echo "package=$package" >> $GITHUB_OUTPUT
+          echo "package=$package"
+      - name: Set branch variable
+        id: define_branch_name
+        run: |
+          branch="update_eed_packages"
+          echo "branch=$branch" >> $GITHUB_OUTPUT
+          echo "branch=$branch"
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+      - name: Set up git user
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Fetch and list all branches
+        run: |
+          git fetch --all
+          git branch --list
+      - name: Check if branch exists
+        id: branch_check
+        run: |
+            branch="${{ steps.define_branch_name.outputs.branch }}"
+            if git ls-remote --heads origin $branch | grep -q $branch ; then
+              branch_exists=true
+            else
+              branch_exists=false
+            fi
+            echo "branch_exists=$branch_exists" >> $GITHUB_OUTPUT
+            echo "branch_exists=$branch_exists"
+
+      - name: Checkout or create branch
+        run: |
+          branch="${{ steps.define_branch_name.outputs.branch }}"
+          if [ "${{ steps.branch_check.outputs.branch_exists }}" = "true" ]; then
+            git switch $branch && git pull
+          else
+            git switch -c $branch
+          fi
+          commit_id=$(git rev-parse HEAD)
+          echo "commit_id = $commit_id"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+      - name: Install dependencies
+        run: |
+            pip install uv
+            python -m pip install --upgrade pip
+            uv sync
+      - name: Update ${{ steps.define_package_name.outputs.package }} using uv
+        run: uv add "${{ steps.define_package_name.outputs.package }}" --upgrade-package "${{ steps.define_package_name.outputs.package }}"
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if git status --porcelain | grep .; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push changes
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          branch="${{ steps.define_branch_name.outputs.branch }}"
+          git add .
+          git commit -m "Update ${{ steps.define_package_name.outputs.package }}"
+          git push origin $branch
+
+      - name: Check for existing open PR
+        id: pr_check
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          branch="${{ steps.define_branch_name.outputs.branch }}"
+          pr_number=$(gh pr list --head "$branch" --state open --json number --jq '.[0].number')
+          if [ -n "$pr_number" ]; then
+            pr_exists=true
+          else
+            pr_exists=false
+          fi
+          echo "pr_exists=$pr_exists" >> $GITHUB_OUTPUT
+          echo "pr_exists=$pr_exists"
+      - name: create pull request
+        if: steps.changes.outputs.changed == 'true' && steps.pr_check.outputs.pr_exists == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          base_branch="${{ steps.get_base_branch.outputs.base_branch }}"
+          pr_title="${{ steps.define_branch_name.outputs.branch }}"
+          user="${{ steps.get_user.outputs.trigger_user }}"
+          pr_url=$(gh pr create --title "$pr_title" --body "$pr_title" --base "$base_branch" --assignee "$user" --reviewer "$user")
+          echo "Created PR: $pr_url"
