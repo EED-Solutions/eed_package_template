@@ -116,5 +116,5 @@ jobs:
           base_branch="${{ steps.get_base_branch.outputs.base_branch }}"
           pr_title="${{ steps.define_branch_name.outputs.branch }}"
           user="${{ steps.get_user.outputs.trigger_user }}"
-            pr_url=$(gh pr create --title "$pr_title" --body "$pr_title" --base "$base_branch" --assignee "$user" --reviewer "$user")
+          pr_url=$(gh pr create --title "$pr_title" --body "$pr_title" --base "$base_branch" --assignee "$user" --reviewer "$user")  # TODO: PR needs to be created by a technical user
           echo "Created PR: $pr_url"
