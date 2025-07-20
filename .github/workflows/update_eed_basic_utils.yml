@@ -81,10 +81,25 @@ jobs:
           git add .
           git commit -m "Update ${{ steps.define_package_name.outputs.package }}"
           git push origin $branch
+
+      - name: Check for existing open PR
+        id: pr_check
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          branch="${{ steps.define_branch_name.outputs.branch }}"
+          pr_number=$(gh pr list --head "$branch" --state open --json number --jq '.[0].number')
+          if [ -n "$pr_number" ]; then
+            pr_exists=true
+          else
+            pr_exists=false
+          fi
+          echo "pr_exists=$pr_exists" >> $GITHUB_OUTPUT
+          echo "pr_exists=$pr_exists"
       - name: create pull request
-        if: steps.changes.outputs.changed == 'true' && steps.branch_check.outputs.branch_exists == 'false'
+        if: steps.changes.outputs.changed == 'true' && steps.pr_check.outputs.pr_exists == 'false'
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           base_branch="${{ steps.define_branch_name.outputs.branch }}"
-          gh pr create --title "$base_branch" --base "$base_branch"
+          gh pr create --title "$base_branch" --body "$base_branch"  --base "$base_branch"
