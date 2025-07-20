@@ -7,6 +7,12 @@ jobs:
   update-eed-basic-utils:
     runs-on: ubuntu-latest
     steps:
+      - name: Get base branch name
+        id: get_base_branch
+        run: |
+          base_branch=${GITHUB_REF_NAME}
+          echo "base_branch=$base_branch" >> $GITHUB_OUTPUT
+          echo "base_branch=$base_branch"
       - name: Set package variable
         id: define_package_name
         run: |
@@ -101,5 +107,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
-          base_branch="${{ steps.define_branch_name.outputs.branch }}"
+          base_branch="${{ steps.get_base_branch.outputs.base_branch }}"
           gh pr create --title "$base_branch" --body "$base_branch"  --base "$base_branch"
