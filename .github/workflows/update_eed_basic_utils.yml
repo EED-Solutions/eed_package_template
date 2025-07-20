@@ -7,6 +7,12 @@ jobs:
   update-eed-basic-utils:
     runs-on: ubuntu-latest
     steps:
+      - name: Get triggering user login
+        id: get_user
+        run: |
+          trigger_user="${{ github.triggering_actor }}""
+          echo "trigger_user=$trigger_user" >> $GITHUB_OUTPUT
+          echo "Workflow triggered by: trigger_user"
       - name: Get base branch name
         id: get_base_branch
         run: |
@@ -109,4 +115,6 @@ jobs:
         run: |
           base_branch="${{ steps.get_base_branch.outputs.base_branch }}"
           pr_title="${{ steps.define_branch_name.outputs.branch }}"
-          gh pr create --title "$pr_title" --body "$base_branch"  --base "$base_branch"
+          user="${{ steps.get_user.outputs.trigger_user }}"
+            pr_url=$(gh pr create --title "$pr_title" --body "$pr_title" --base "$base_branch" --assignee "$user" --reviewer "$user")
+          echo "Created PR: $pr_url"
