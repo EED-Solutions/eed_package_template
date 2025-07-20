@@ -10,7 +10,7 @@ jobs:
       - name: Set branch variable
         id: define_branch_name
         run: |
-          branch="update_eed_basic_utils"
+          branch="update_eed_packages"
           echo "branch=$branch" >> $GITHUB_OUTPUT
           echo "branch=$branch"
       - name: Checkout repository
@@ -79,5 +79,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
-          base_branch=$(git rev-parse --abbrev-ref HEAD)
-          gh pr create --title "update_eed_basic_utils" --body "Update eed_basic_utils package" --head "${{ steps.vars.outputs.branch }}" --base "$base_branch"
+          base_branch="${{ steps.define_branch_name.outputs.branch }}"
+          gh pr create --title "$base_branch" --base "$base_branch"
