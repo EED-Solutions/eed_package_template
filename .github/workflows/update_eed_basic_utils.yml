@@ -7,6 +7,12 @@ jobs:
   update-eed-basic-utils:
     runs-on: ubuntu-latest
     steps:
+      - name: Set branch variable
+        id: define_branch_name
+        run: |
+          branch="update_eed_basic_utils"
+          echo "branch=$branch" >> $GITHUB_OUTPUT
+          echo "branch=$branch"
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -22,7 +28,8 @@ jobs:
       - name: Check if branch exists
         id: branch_check
         run: |
-            if git ls-remote --heads origin update_eed_basic_utils | grep -q update_eed_basic_utils ; then
+            branch="${{ steps.define_branch_name.outputs.branch }}"
+            if git ls-remote --heads origin $branch | grep -q $branch ; then
               branch_exists=true
             else
               branch_exists=false
@@ -32,10 +39,11 @@ jobs:
 
       - name: Checkout or create branch
         run: |
+          branch="${{ steps.define_branch_name.outputs.branch }}"
           if [ "${{ steps.branch_check.outputs.branch_exists }}" = "true" ]; then
-            git fetch && git switch update_eed_basic_utils && git pull
+            git switch $branch && git pull
           else
-            git switch -c update_eed_basic_utils
+            git switch -c $branch
           fi
           commit_id=$(git rev-parse HEAD)
           echo "commit_id = $commit_id"
@@ -66,10 +74,10 @@ jobs:
           git add .
           git commit -m "Update eed_basic_utils"
           git push origin update_eed_basic_utils
-
       - name: create pull request
         if: steps.changes.outputs.changed == 'true' && steps.branch_check.outputs.branch_exists == 'false'
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
-          gh pr create --title "update_eed_basic_utils" --body "Update eed_basic_utils package" --base main --head update_eed_basic_utils
+          base_branch=$(git rev-parse --abbrev-ref HEAD)
+          gh pr create --title "update_eed_basic_utils" --body "Update eed_basic_utils package" --head "${{ steps.vars.outputs.branch }}" --base "$base_branch"
