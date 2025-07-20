@@ -2,6 +2,10 @@ name: callable_update_eed_basic_utils
 
 on:
   workflow_call:
+    inputs:
+      package_name:
+        required: true
+        type: string
 
 jobs:
   update-eed-basic-utils:
@@ -22,7 +26,7 @@ jobs:
       - name: Set package variable
         id: define_package_name
         run: |
-          package="eed_basic_utils"
+          package="${{ inputs.package_name }}"
           echo "package=$package" >> $GITHUB_OUTPUT
           echo "package=$package"
       - name: Set branch variable
