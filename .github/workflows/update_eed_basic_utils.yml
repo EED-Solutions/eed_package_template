@@ -108,4 +108,5 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           base_branch="${{ steps.get_base_branch.outputs.base_branch }}"
-          gh pr create --title "$base_branch" --body "$base_branch"  --base "$base_branch"
+          pr_title="${{ steps.define_branch_name.outputs.branch }}"
+          gh pr create --title "$pr_title" --body "$base_branch"  --base "$base_branch"
