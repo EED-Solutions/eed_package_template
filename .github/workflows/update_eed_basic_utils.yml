@@ -7,6 +7,12 @@ jobs:
   update-eed-basic-utils:
     runs-on: ubuntu-latest
     steps:
+      - name: Set package variable
+        id: define_package_name
+        run: |
+          package="eed_basic_utils"
+          echo "package=$package" >> $GITHUB_OUTPUT
+          echo "package=$package"
       - name: Set branch variable
         id: define_branch_name
         run: |
@@ -56,8 +62,8 @@ jobs:
             pip install uv
             python -m pip install --upgrade pip
             uv sync
-      - name: Update eed_basic_utils using uv
-        run: uv add "eed_basic_utils" --upgrade-package eed_basic_utils
+      - name: Update ${{ steps.define_package_name.outputs.package }} using uv
+        run: uv add "${{ steps.define_package_name.outputs.package }}" --upgrade-package "${{ steps.define_package_name.outputs.package }}"
 
       - name: Check for changes
         id: changes
@@ -72,7 +78,7 @@ jobs:
         if: steps.changes.outputs.changed == 'true'
         run: |
           git add .
-          git commit -m "Update eed_basic_utils"
+          git commit -m "Update ${{ steps.define_package_name.outputs.package }}"
           git push origin update_eed_basic_utils
       - name: create pull request
         if: steps.changes.outputs.changed == 'true' && steps.branch_check.outputs.branch_exists == 'false'
