@@ -1,4 +1,4 @@
-name: update_eed_basic_utils_caller
+name: update_eed_basic_utils
 
 on:
   workflow_dispatch:
@@ -8,3 +8,5 @@ jobs:
     uses: ./.github/workflows/callable_update_eed_basic_utils.yml
     with:
       package_name: eed_basic_utils
+    secrets:
+      GH_PAT: ${{ secrets.GH_PAT }}
