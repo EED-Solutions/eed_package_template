@@ -77,9 +77,10 @@ jobs:
       - name: Commit and push changes
         if: steps.changes.outputs.changed == 'true'
         run: |
+          branch="${{ steps.define_branch_name.outputs.branch }}"
           git add .
           git commit -m "Update ${{ steps.define_package_name.outputs.package }}"
-          git push origin update_eed_basic_utils
+          git push origin $branch
       - name: create pull request
         if: steps.changes.outputs.changed == 'true' && steps.branch_check.outputs.branch_exists == 'false'
         env:
