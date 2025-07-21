@@ -5,4 +5,4 @@ on:
     workflow_dispatch:
 jobs:
     pytests:
-      uses: ./.github/workflows/callable_pytests.yml
+      uses: EED-Solutions/eed_gha_workflows/.github/workflows/callable_pytests.yml@main
