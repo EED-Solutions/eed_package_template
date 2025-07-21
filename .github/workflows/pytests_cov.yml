@@ -1,0 +1,8 @@
+name: pytests_cov
+
+on:
+    # pull_request:
+    workflow_dispatch:
+jobs:
+    pytpytests_covests:
+      uses: EED-Solutions/eed_gha_workflows/.github/workflows/callable_pytests_cov.yml@dev
