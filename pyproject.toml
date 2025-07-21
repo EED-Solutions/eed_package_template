@@ -23,6 +23,9 @@ dev = [
     "ruff>=0.12.3",
 ]
 
+[project.scripts]
+hello_world = "eed_package_template.hello_world:hello_world"
+
 [tool.ruff]
 # Set the maximum line length to 79.
 line-length = 79
