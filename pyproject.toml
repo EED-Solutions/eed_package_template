@@ -19,8 +19,12 @@ build-backend = "hatchling.build"
 dev = [
     "pre-commit>=4.2.0",
     "pytest>=8.4.1",
+    "pytest-cov>=6.2.1",
     "ruff>=0.12.3",
 ]
+
+[project.scripts]
+hello_world = "eed_package_template.hello_world:hello_world"
 
 [tool.ruff]
 # Set the maximum line length to 79.
