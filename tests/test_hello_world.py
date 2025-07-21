@@ -9,5 +9,9 @@ def test_hello_world() -> None:
     that includes the git root directory.
     """
     result = hello_world()
-    assert "Hello from" in result, "Greeting message should start with 'Hello from'"
-    assert "eed_package_template" in result, "Greeting message should include 'eed-package-template'"
+    assert "Hello from" in result, (
+        "Greeting message should start with 'Hello from'"
+    )
+    assert "eed_package_template" in result, (
+        "Greeting message should include 'eed-package-template'"
+    )
