@@ -1,0 +1,59 @@
+{
+  "id": 6732884,
+  "name": "semantic versioning",
+  "target": "tag",
+  "source_type": "Repository",
+  "source": "EED-Solutions/eed_package_template",
+  "enforcement": "active",
+  "conditions": {
+    "ref_name": {
+      "exclude": [],
+      "include": [
+        "refs/tags/*.*.*"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "type": "deletion"
+    },
+    {
+      "type": "non_fast_forward"
+    },
+    {
+      "type": "creation"
+    },
+    {
+      "type": "update"
+    },
+    {
+      "type": "required_signatures"
+    },
+    {
+      "type": "required_status_checks",
+      "parameters": {
+        "strict_required_status_checks_policy": false,
+        "do_not_enforce_on_create": false,
+        "required_status_checks": [
+          {
+            "context": "ruff",
+            "integration_id": 15368
+          },
+          {
+            "context": "pytests (3.11)",
+            "integration_id": 15368
+          },
+          {
+            "context": "pytests (3.12)",
+            "integration_id": 15368
+          },
+          {
+            "context": "pytests (3.13)",
+            "integration_id": 15368
+          }
+        ]
+      }
+    }
+  ],
+  "bypass_actors": []
+}
