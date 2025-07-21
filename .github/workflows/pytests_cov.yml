@@ -6,3 +6,5 @@ on:
 jobs:
     pytpytests_covests:
       uses: EED-Solutions/eed_gha_workflows/.github/workflows/callable_pytests_cov.yml@dev
+      with:
+        package_name: eed_package_template
