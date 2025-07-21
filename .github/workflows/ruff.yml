@@ -6,4 +6,4 @@ on:
 
 jobs:
   ruff:
-    uses: ./.github/workflows/callable_ruff.yml
+    uses: EED-Solutions/eed_gha_workflows/.github/workflows/callable_ruff.yml@main
