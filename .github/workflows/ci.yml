@@ -10,6 +10,11 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: EED-Solutions/eed_gha_workflows/.github/actions/ruff@actions
+      - name: ruff
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/ruff@actions
         with:
           branch_name: ${{ github.ref_name }}
+      - name: pytests
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/pytests@actions
+        with:
+            python_version: '3.12'
