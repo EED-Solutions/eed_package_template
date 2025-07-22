@@ -8,7 +8,7 @@ jobs:
       runs-on: ubuntu-latest
       steps:
       - name: install duckdb
-        uses: opt-nc/setup-duckdb-action@latest
+        uses: opt-nc/setup-duckdb-action@v1.0.14
         with:
             version: latest
       - name: Get triggering repo
