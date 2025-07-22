@@ -5,4 +5,20 @@ on:
     workflow_dispatch:
 jobs:
     pytpytests_covests:
-      uses: EED-Solutions/eed_gha_workflows/.github/workflows/callable_pytests_cov.yml@dev
+      runs-on: ubuntu-latest
+      steps:
+      - name: install duckdb
+        uses: opt-nc/setup-duckdb-action@v1.0.14
+        with:
+            version: latest
+      - name: Get triggering repo
+        id: get_package_name
+        run: |
+          gh_org_repo="${{ GITHUB.REPOSITORY }}"
+          package_name=$(duckdb -csv -noheader -c "SELECT SPLIT('${gh_org_repo}', '/')[-1] AS repo")
+          echo "package_name=$package_name" >> $GITHUB_OUTPUT
+          echo "Workflow triggered by: ${package_name}"
+      - name: run callabale pytest cov
+        uses: EED-Solutions/eed_gha_workflows/.github/workflows/callable_pytests_cov.yml@dev
+        with:
+          package_name: ${{ steps.get_package_name.outputs.package_name }}
