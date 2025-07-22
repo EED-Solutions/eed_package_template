@@ -8,4 +8,8 @@ on:
 
 jobs:
   ci:
-    uses: ./.github/workflows/pytests.yml
+    runs-on: ubuntu-latest
+    steps:
+      - uses: EED-Solutions/eed_gha_workflows/.github/actions/ruff@actions
+        with:
+          branch_name: ${{ github.ref_name }}
