@@ -48,8 +48,11 @@ jobs:
       - name: Set up matrix for pytests
         id: set_matrix
         run: |
-          matrix_json='{"python-version": '"${{ steps.get_python_version.outputs.python_versions }}"'}'
-          echo "matrix=$matrix_json" >> $GITHUB_OUTPUT
+            python_versions="${{ steps.get_python_version.outputs.python_versions }}"
+            echo "python_versions=$python_versions"
+            matrix_json="{\"python-version\": $python_versions}"
+            echo "matrix=$matrix_json" >> $GITHUB_OUTPUT
+
   pytests:
     name: Run Pytests
     runs-on: ubuntu-latest
