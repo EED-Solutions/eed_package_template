@@ -12,9 +12,6 @@ jobs:
     name: Run Ruff
     runs-on: ubuntu-latest
     steps:
-
-      - name: install duckdb
-        uses: EED-Solutions/eed_gha_workflows/.github/actions/install_duckdb@actions
       - name: "checkout repository"
         uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout_code@actions
 
@@ -28,6 +25,8 @@ jobs:
     outputs:
       matrix: ${{ steps.set_matrix.outputs.matrix }}
     steps:
+      - name: install duckdb
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/install_duckdb@actions
       - name: checkout_gha_workflows
         uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout_code@actions
         with:
