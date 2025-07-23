@@ -31,10 +31,14 @@ jobs:
         uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout_code@actions
         with:
             repository: EED-Solutions/eed_gha_workflows
-            ref: main
+            ref: actions
             path: config
             sparse-checkout: |
                 .github/actions/pytests/.python-versions
+      - name: Debug - List files
+        run: |
+          find config -type f | sort
+
       - name: Get Python Version for pytests
         id: get_python_version
         run: |
