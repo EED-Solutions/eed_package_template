@@ -6,15 +6,61 @@ on:
 #   pull_request:
   workflow_dispatch:
 
+
 jobs:
-  ci:
+  lint:
+    name: Run Ruff
     runs-on: ubuntu-latest
     steps:
+
+      - name: install duckdb
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/install_duckdb@actions
+      - name: "checkout repository"
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout@actions
+
       - name: ruff
         uses: EED-Solutions/eed_gha_workflows/.github/actions/ruff@actions
         with:
-          branch_name: ${{ github.ref_name }}
+            checkout_code: false
+  generate-matrix:
+    runs-on: ubuntu-latest
+    name: generate matrix for pytests
+    outputs:
+      matrix: ${{ steps.set_matrix.outputs.matrix }}
+    steps:
+      - name: checkout_gha_workflows
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout@actions
+        with:
+            repository: EED-Solutions/eed_gha_workflows
+            ref: main
+            path: config
+            sparse-checkout: |
+                .github/actions/pytests/.python-versions
+      - name: Get Python Version for pytests
+        id: get_python_version
+        run: |
+            python_versions=$(duckdb -csv -noheader -c "SELECT ARRAY_AGG(column0) FROM READ_CSV('config/.github/actions/pytests/.python-versions', HEADER=FALSE)") # ["3.12", "3.13"]
+            echo "python_versions=$python_versions" >> $GITHUB_OUTPUT
+            echo "Python version for tests: ${python_versions}"
+      - name: Set up matrix for pytests
+        id: set_matrix
+        run: |
+          matrix = {
+            "python-version": ${{ steps.get_python_version.outputs.python_versions }}
+          }
+          echo "matrix=$matrix" >> $GITHUB_OUTPUT
+  pytests:
+    name: Run Pytests
+    runs-on: ubuntu-latest
+    needs: generate-matrix
+    strategy:
+      matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
+    steps:
+
+      - name: "checkout repository"
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout@actions
       - name: pytests
         uses: EED-Solutions/eed_gha_workflows/.github/actions/pytests@actions
         with:
-            python_version: '3.12'
+            python_version: ${{ matrix.python-version }}
+            checkout_code: false
