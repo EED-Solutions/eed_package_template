@@ -48,7 +48,7 @@ jobs:
       - name: Set up matrix for pytests
         id: set_matrix
         run: |
-          matrix = '{"python-version": ${{ steps.get_python_version.outputs.python_versions }}}'
+          matrix='{"python-version": ${{ steps.get_python_version.outputs.python_versions }}}'
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
   pytests:
     name: Run Pytests
