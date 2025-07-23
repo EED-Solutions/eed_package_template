@@ -16,7 +16,7 @@ jobs:
       - name: install duckdb
         uses: EED-Solutions/eed_gha_workflows/.github/actions/install_duckdb@actions
       - name: "checkout repository"
-        uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout@actions
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout_code@actions
 
       - name: ruff
         uses: EED-Solutions/eed_gha_workflows/.github/actions/ruff@actions
@@ -29,7 +29,7 @@ jobs:
       matrix: ${{ steps.set_matrix.outputs.matrix }}
     steps:
       - name: checkout_gha_workflows
-        uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout@actions
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout_code@actions
         with:
             repository: EED-Solutions/eed_gha_workflows
             ref: main
@@ -58,7 +58,7 @@ jobs:
     steps:
 
       - name: "checkout repository"
-        uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout@actions
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout_code@actions
       - name: pytests
         uses: EED-Solutions/eed_gha_workflows/.github/actions/pytests@actions
         with:
