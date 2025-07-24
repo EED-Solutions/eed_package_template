@@ -61,8 +61,12 @@ jobs:
     steps:
       - name: "checkout repository"
         uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout_code@actions
+      - name: "install uv and python"
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/install_uv@actions
+        with:
+            python_version: ${{ matrix.python-version }}
       - name: pytests
         uses: EED-Solutions/eed_gha_workflows/.github/actions/pytests@actions
         with:
-            python_version: ${{ matrix.python-version }}
             checkout_code: false
+            install_uv: false
