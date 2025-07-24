@@ -67,7 +67,7 @@ jobs:
             python-version: ${{ matrix.python-version }}
             version-file: ''
       - name: set up python environment
-        uses: EED-Solutions/eed_gha_workflows/.github/actions/set_up_py@actions
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/set_up_py_env@actions
       - name: pytests
         uses: EED-Solutions/eed_gha_workflows/.github/actions/pytests@actions
         with:
