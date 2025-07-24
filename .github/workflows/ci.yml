@@ -79,7 +79,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "checkout repository"
-        uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout_code@main
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout_code@add-pytest-cov
+        with:
+            echo-files: true
       - name: "install uv and python"
         uses: EED-Solutions/eed_gha_workflows/.github/actions/install_uv@main
       - name: set up python environment
