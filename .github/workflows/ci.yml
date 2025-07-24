@@ -74,3 +74,19 @@ jobs:
             checkout_code: false
             install_uv: false
             install_dependencies: false
+  pytests_cov:
+    name: Run Pytests with Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: "checkout repository"
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout_code@main
+      - name: "install uv and python"
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/install_uv@main
+      - name: set up python environment
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/set_up_py_env@main
+      - name: pytests with coverage
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/pytests_cov@add-pytest-cov
+        with:
+            checkout_code: false
+            install_uv: false
+            install_dependencies: false
