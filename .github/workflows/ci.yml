@@ -42,13 +42,13 @@ jobs:
       - name: Get Python Version for pytests
         id: get_python_version
         run: |
-            python_versions=$(duckdb -csv -noheader -c "SELECT ARRAY_AGG(column0) FROM READ_CSV('config/.github/actions/pytests/.python-versions', HEADER=FALSE)") # ["3.12", "3.13"]
+            python_versions=$(duckdb -csv -noheader -c "SELECT JSON_GROUP_ARRAY(column0) FROM READ_CSV('config/.github/actions/pytests/.python-versions', HEADER=FALSE, ALL_VARCHAR=TRUE)") # ["3.12", "3.13"]
             echo "python_versions=$python_versions" >> $GITHUB_OUTPUT
             echo "Python version for tests: ${python_versions}"
       - name: Set up matrix for pytests
         id: set_matrix
         run: |
-            python_versions="${{ steps.get_python_version.outputs.python_versions }}"
+            python_versions=${{ steps.get_python_version.outputs.python_versions }}
             echo "python_versions=$python_versions"
             matrix_json="{\"python-version\": $python_versions}"
             echo "matrix=$matrix_json" >> $GITHUB_OUTPUT
