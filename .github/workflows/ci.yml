@@ -32,7 +32,7 @@ jobs:
         uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout_code@main
         with:
             repository: EED-Solutions/eed_gha_workflows
-            ref: actions
+            ref: main  # change for development purposes
             path: config
             sparse-checkout: |
                 .github/actions/pytests/.python-versions
