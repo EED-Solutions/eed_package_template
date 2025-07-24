@@ -64,7 +64,8 @@ jobs:
       - name: "install uv and python"
         uses: EED-Solutions/eed_gha_workflows/.github/actions/install_uv@actions
         with:
-            python_version: ${{ matrix.python-version }}
+            python-version: ${{ matrix.python-version }}
+            version-file: ''
       - name: pytests
         uses: EED-Solutions/eed_gha_workflows/.github/actions/pytests@actions
         with:
