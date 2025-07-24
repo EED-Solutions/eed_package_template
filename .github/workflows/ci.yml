@@ -1,15 +1,76 @@
 name: ci
 
 on:
-#   push:
-#     branches: [main]
-#   pull_request:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
+
 jobs:
-  ci:
+  lint:
+    name: Run Ruff
     runs-on: ubuntu-latest
     steps:
-      - uses: EED-Solutions/eed_gha_workflows/.github/actions/ruff@actions
+      - name: "checkout repository"
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout_code@main
+
+      - name: ruff
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/ruff@main
         with:
-          branch_name: ${{ github.ref_name }}
+            checkout_code: false
+  generate-matrix:
+    runs-on: ubuntu-latest
+    name: generate matrix for pytests
+    outputs:
+      matrix: ${{ steps.set_matrix.outputs.matrix }}
+    steps:
+      - name: install duckdb
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/install_duckdb@main
+      - name: checkout_gha_workflows
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout_code@main
+        with:
+            repository: EED-Solutions/eed_gha_workflows
+            ref: main  # change for development purposes
+            path: config
+            sparse-checkout: |
+                .github/actions/pytests/.python-versions
+      - name: Debug - List files
+        run: |
+          find config -type f | sort
+      - name: Get Python Version for pytests
+        id: get_python_version
+        run: |
+            python_versions=$(duckdb -csv -noheader -c "SELECT JSON_GROUP_ARRAY(column0) FROM READ_CSV('config/.github/actions/pytests/.python-versions', HEADER=FALSE, ALL_VARCHAR=TRUE)") # ["3.12", "3.13"]
+            echo "python_versions=$python_versions" >> $GITHUB_OUTPUT
+            echo "Python version for tests: ${python_versions}"
+      - name: Set up matrix for pytests
+        id: set_matrix
+        run: |
+            python_versions=${{ steps.get_python_version.outputs.python_versions }}
+            matrix_json="{\"python-version\": $python_versions}"
+            echo "matrix=$matrix_json" >> $GITHUB_OUTPUT
+            echo "matrix=$matrix_json"
+  pytests:
+    name: Run Pytests
+    runs-on: ubuntu-latest
+    needs: generate-matrix
+    strategy:
+      matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
+    steps:
+      - name: "checkout repository"
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout_code@main
+      - name: "install uv and python"
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/install_uv@main
+        with:
+            python-version: ${{ matrix.python-version }}
+            version-file: ''
+      - name: set up python environment
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/set_up_py_env@main
+      - name: pytests
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/pytests@main
+        with:
+            checkout_code: false
+            install_uv: false
+            install_dependencies: false

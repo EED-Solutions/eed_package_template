@@ -1,11 +1,7 @@
 name: pytests
 
 on:
-    push:
-        branches: [main]
-    pull_request:
     workflow_dispatch:
-    workflow_call:
 jobs:
     pytests:
       uses: EED-Solutions/eed_gha_workflows/.github/workflows/callable_pytests.yml@main
