@@ -60,16 +60,16 @@ jobs:
       matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
     steps:
       - name: "checkout repository"
-        uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout_code@actions
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout_code@main
       - name: "install uv and python"
-        uses: EED-Solutions/eed_gha_workflows/.github/actions/install_uv@actions
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/install_uv@main
         with:
             python-version: ${{ matrix.python-version }}
             version-file: ''
       - name: set up python environment
-        uses: EED-Solutions/eed_gha_workflows/.github/actions/set_up_py_env@actions
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/set_up_py_env@main
       - name: pytests
-        uses: EED-Solutions/eed_gha_workflows/.github/actions/pytests@actions
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/pytests@main
         with:
             checkout_code: false
             install_uv: false
