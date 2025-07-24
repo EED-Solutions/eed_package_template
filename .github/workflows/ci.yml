@@ -4,6 +4,7 @@ on:
 #   push:
 #     branches: [main]
 #   pull_request:
+#     branches: [main]
   workflow_dispatch:
 
 
@@ -33,12 +34,11 @@ jobs:
             repository: EED-Solutions/eed_gha_workflows
             ref: actions
             path: config
-            # sparse-checkout: |
-            #     .github/actions/pytests/.python-versions
+            sparse-checkout: |
+                .github/actions/pytests/.python-versions
       - name: Debug - List files
         run: |
           find config -type f | sort
-
       - name: Get Python Version for pytests
         id: get_python_version
         run: |
@@ -49,10 +49,9 @@ jobs:
         id: set_matrix
         run: |
             python_versions=${{ steps.get_python_version.outputs.python_versions }}
-            echo "python_versions=$python_versions"
             matrix_json="{\"python-version\": $python_versions}"
             echo "matrix=$matrix_json" >> $GITHUB_OUTPUT
-
+            echo "matrix=$matrix_json"
   pytests:
     name: Run Pytests
     runs-on: ubuntu-latest
@@ -60,7 +59,6 @@ jobs:
     strategy:
       matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
     steps:
-
       - name: "checkout repository"
         uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout_code@actions
       - name: pytests
