@@ -105,7 +105,7 @@ jobs:
           echo "home: $HOME"
           tree -a -L 4
       - name: "install uv and python"
-        uses: EED-Solutions/eed_gha_workflows/.github/actions/install_uv@main
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/install_uv@@add-pytest-cov
       - name: set up python environment
         uses: EED-Solutions/eed_gha_workflows/.github/actions/set_up_py_env@main
       - name: pytests with coverage
