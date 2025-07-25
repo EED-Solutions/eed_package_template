@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: generate-parameters
     strategy:
-      matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
+      matrix: ${{ fromJson(needs.generate-parameters.outputs.matrix) }}
     steps:
       - name: "checkout repository"
         uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout_code@main
