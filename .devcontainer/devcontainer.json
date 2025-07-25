@@ -8,10 +8,13 @@
       "extensions": [
         "ms-python.python",
         "ms-python.vscode-pylance"
-      ]
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
     }
   },
-  "postCreateCommand": "uv venv && uv sync",
+  "postCreateCommand": "uv venv --force  && uv sync -v",
   "features": {},
   "remoteUser": "vscode"
 }
