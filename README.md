@@ -18,6 +18,11 @@
 11. Update repository settings as needed (e.g., import branch/tag rulesets, general settings). For more information, see [this guide](https://eed-solutions.atlassian.net/wiki/x/BIA8Mw) (private access). Rulesets are documented under ``.github\rulesets`` and can be imported.
 12. Merge the pull request and create the initial release (e.g., `0.1.0`).
 
+## Github actions
+
+Workflows are centraly hosted in EED_Solutions/eed_gha_workflows.
+Please check for more details here.
+
 ## Other
 
 Test EED85-machine

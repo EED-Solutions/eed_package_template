@@ -22,7 +22,7 @@ jobs:
             checkout_code: false
   generate-parameters:
     runs-on: ubuntu-latest
-    name: generate matrix for pytests
+    name: generate parameters
     outputs:
       matrix: ${{ steps.set_matrix.outputs.matrix }}
     steps:
@@ -86,7 +86,7 @@ jobs:
       - name: set up python environment
         uses: EED-Solutions/eed_gha_workflows/.github/actions/set_up_py_env@main
       - name: pytests with coverage
-        uses: EED-Solutions/eed_gha_workflows/.github/actions/pytests_cov@add-pytest-cov-ii
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/pytests_cov@main
         with:
             checkout_code: false
             install_uv: false
