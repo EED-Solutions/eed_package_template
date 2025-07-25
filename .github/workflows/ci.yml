@@ -91,7 +91,7 @@ jobs:
           echo "pwd: $(pwd)"
           echo "home: $HOME"
       - name: "checkout repository"
-        uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout_code@add-pytest-cov
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout_code@main
         with:
             echo-files: true
       - name: echo environment variables
@@ -105,11 +105,11 @@ jobs:
           echo "home: $HOME"
           tree -a -L 4
       - name: "install uv and python"
-        uses: EED-Solutions/eed_gha_workflows/.github/actions/install_uv@add-pytest-cov
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/install_uv@main
       - name: set up python environment
         uses: EED-Solutions/eed_gha_workflows/.github/actions/set_up_py_env@main
       - name: pytests with coverage
-        uses: EED-Solutions/eed_gha_workflows/.github/actions/pytests_cov@add-pytest-cov
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/pytests_cov@add-pytest-cov-ii
         with:
             checkout_code: false
             install_uv: false
