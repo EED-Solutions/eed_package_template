@@ -1,0 +1,32 @@
+{
+  "name": "uv-python-dev",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "charliermarsh.ruff",
+        "atlassian.atlascode",
+        "njpwerner.autodocstring",
+        "ms-azuretools.vscode-docker",
+        "github.vscode-github-actions",
+        "eamodio.gitlens",
+        "ms-toolsai.jupyter",
+        "mechatroner.rainbow-csv",
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true,
+        "files.trimFinalNewlines": true,
+        "files.autoSave": "afterDelay",
+      }
+    }
+  },
+  "postCreateCommand": "uv venv --force  && uv sync -v",
+  "features": {},
+  "remoteUser": "vscode"
+}
