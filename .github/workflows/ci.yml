@@ -80,8 +80,7 @@ jobs:
     steps:
       - name: install tree tool
         run: |
-          sudo apt-get install tree
-          tree --dirs-only --all -L 4
+          tree -d -a -L 4
       - name: echo environment variables
         run: |
           echo "GITHUB_WORKFLOW: ${{ github.workflow }}"
@@ -104,7 +103,7 @@ jobs:
           echo "GITHUB_REF_NAME: ${{ github.ref_name }}"
           echo "pwd: $(pwd)"
           echo "home: $HOME"
-          tree --dirs-only --all -L 4
+          tree -d -a -L 4
       - name: "install uv and python"
         uses: EED-Solutions/eed_gha_workflows/.github/actions/install_uv@main
       - name: set up python environment
