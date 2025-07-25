@@ -74,3 +74,43 @@ jobs:
             checkout_code: false
             install_uv: false
             install_dependencies: false
+  pytests_cov:
+    name: Run Pytests with Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: install tree tool
+        run: |
+          tree -d -a -L 4
+      - name: echo environment variables
+        run: |
+          echo "GITHUB_WORKFLOW: ${{ github.workflow }}"
+          echo "Github workspace: ${{ github.workspace }}"
+          echo "GITHUB_EVENT_NAME: ${{ github.event_name }}"
+          echo "GITHUB_REPOSITORY: ${{ github.repository }}"
+          echo "GITHUB_REF_NAME: ${{ github.ref_name }}"
+          echo "pwd: $(pwd)"
+          echo "home: $HOME"
+      - name: "checkout repository"
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout_code@add-pytest-cov
+        with:
+            echo-files: true
+      - name: echo environment variables
+        run: |
+          echo "GITHUB_WORKFLOW: ${{ github.workflow }}"
+          echo "Github workspace: ${{ github.workspace }}"
+          echo "GITHUB_EVENT_NAME: ${{ github.event_name }}"
+          echo "GITHUB_REPOSITORY: ${{ github.repository }}"
+          echo "GITHUB_REF_NAME: ${{ github.ref_name }}"
+          echo "pwd: $(pwd)"
+          echo "home: $HOME"
+          tree -a -L 4
+      - name: "install uv and python"
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/install_uv@@add-pytest-cov
+      - name: set up python environment
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/set_up_py_env@main
+      - name: pytests with coverage
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/pytests_cov@add-pytest-cov
+        with:
+            checkout_code: false
+            install_uv: false
+            install_dependencies: false
