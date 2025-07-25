@@ -1,0 +1,17 @@
+{
+  "name": "uv-python-dev",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance"
+      ]
+    }
+  },
+  "postCreateCommand": "uv venv && uv sync",
+  "features": {},
+  "remoteUser": "vscode"
+}
