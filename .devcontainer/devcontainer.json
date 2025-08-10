@@ -26,7 +26,7 @@
       }
     }
   },
-  "postCreateCommand": "uv venv --force  && uv sync -v",
+  "postCreateCommand": "uv venv --force  && uv sync -v && git remote add origin https://github.com/EED-Solutions/eed_package_template.git",
   "features": {},
   "remoteUser": "vscode"
 }
