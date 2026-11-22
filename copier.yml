@@ -1,0 +1,50 @@
+# Copier template: EED Python package standard
+#
+# Scaffold a new project:
+#   copier copy gh:EED-Solutions/eed_package_template path/to/eed_my_new_package
+# Update an existing project that was created from this template:
+#   copier update
+
+# ---- questions -----------------------------------------------------------
+project_name:
+  type: str
+  help: >-
+    Distribution name in kebab-case, e.g. 'eed-my-new-package'.
+    Used for pyproject [project.name] and uv.lock.
+  default: eed-my-package
+  validator: "{% if not project_name.startswith('eed-') %}Name must start with 'eed-' (kebab-case, e.g. eed-my-new-package).{% endif %}"
+
+package_slug:
+  type: str
+  help: >-
+    Python package name in snake_case, e.g. 'eed_my_new_package'.
+    Also used as the GitHub repository name and the src/ directory name
+    (EED convention: repo folder name = package name).
+    Derived from project_name by default.
+  default: "{{ project_name | replace('-', '_') }}"
+  validator: "{% if package_slug != package_slug.lower() or '-' in package_slug %}Package name must be lowercase snake_case (underscores, no dashes).{% endif %}"
+
+description:
+  type: str
+  help: Short description for pyproject [project] description.
+  default: Add your description here
+
+github_org:
+  type: str
+  help: GitHub organization owning the generated repository (ruleset 'source' fields).
+  default: EED-Solutions
+
+image_owner:
+  type: str
+  help: GHCR image namespace (lowercase), e.g. ghcr.io/eed85/<package_slug>.
+  default: eed85
+
+# ---- what not to copy into generated projects ----------------------------
+_exclude:
+  - "copier.yml"
+  - ".venv"
+  - ".pytest_cache"
+  - ".ruff_cache"
+  - "__pycache__"
+  - "*.pyc"
+  - ".coverage"
