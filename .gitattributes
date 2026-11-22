@@ -1,0 +1,19 @@
+# Normalize line endings: LF everywhere in the repository and
+# in working-tree checkouts. Windows users still get LF, which is
+# what the CI pipelines, container images and pre-commit hooks expect.
+* text=auto eol=lf
+
+# Windows-only scripts that require CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.whl binary
+*.gz binary
