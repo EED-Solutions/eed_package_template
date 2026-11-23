@@ -1,39 +1,25 @@
 # {{ package_slug }}
 
-## Creating a New Project from This Template
+Notes on this template repository (rendered output lands in generated projects):
 
-Use [Copier](https://copier.readthedocs.io/) to scaffold a new package from this template:
-
-```bash
-copier copy gh:EED-Solutions/eed_package_template path/to/eed_my_new_package
-```
-
-Copier asks for:
-
-- `project_name` — distribution name, kebab-case (e.g., `eed-my-new-package`)
-- `package_slug` — Python package name, snake_case (e.g., `eed_my_new_package`); also used as the repository name and the `src/` directory name. Derived from `project_name` by default.
-- `description` — short description for pyproject
-- `github_org` / `image_owner` — defaults: `EED-Solutions` / `eed85`
-
-Every hardcoded template name (`pyproject.toml` name + script, `src/` directory,
-tests, README, ruleset sources) is replaced automatically.
-
-After scaffolding:
-
-1. Create the repository in the organization (or let `gh repo create` do it), push, open a pull request and make sure all CI pipelines pass.
-2. Update repository settings as needed (e.g., import branch/tag rulesets from `.github/rulesets/`). For more information, see [this guide](https://eed-solutions.atlassian.net/wiki/x/BIA8Mw) (private access).
-3. Merge the pull request and create the initial release (e.g., `0.1.0`).
-
-## Updating an Existing Project
-
-Projects generated from this template store their answers in `.copier-answers.yml`.
-To pull in template improvements later:
+- This repository is a [Copier](https://copier.readthedocs.io/) template.
+- Scaffold a new project:
 
 ```bash
-copier update
+uvx copier copy gh:EED-Solutions/eed_package_template path/to/new_project
 ```
+
+- Answer the questions (project name, description, GitHub org, GHCR owner).
+- All placeholders (`pyproject` name + scripts, `src/` directory, tests, README, ruleset sources) resolve automatically at copy time.
+- After scaffolding: create the repository, push, open a PR, ensure CI passes, import rulesets from `.github/rulesets/` (see the [private guide](https://eed-solutions.atlassian.net/wiki/x/BIA8Mw)), merge, and cut the initial release (e.g., `0.1.0`).
+
+## Updating a generated project to a newer template version
+
+Older projects track their answers in `.copier-answers.yml`; refreshing the improvements:
+
+    copier update
 
 ## Github actions
 
-Workflows are centraly hosted in EED_Solutions/eed_gha_workflows.
+Workflows are centrally hosted in `EED-Solutions/eed_gha_workflows`.
 Please check for more details here.
