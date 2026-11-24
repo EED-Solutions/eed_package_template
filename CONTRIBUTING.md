@@ -13,9 +13,39 @@ and is excluded from generated repositories.
   repositories. That workflow calls the reusable Ruff, pytest, and coverage
   workflows in
   [`eed_gha_workflows`](https://github.com/EED-Solutions/eed_gha_workflows).
+- `publish.yml.jinja` renders as `.github/workflows/publish.yml` in generated
+  repositories. It publishes GitHub prereleases to TestPyPI and stable GitHub
+  Releases to PyPI through the shared reusable workflow.
 - The generated workflow and the shared reusable workflows pin their
   dependencies to exact `eed_gha_workflows` release tags. Keep the references
   consistent when upgrading the shared workflow version.
+
+## Publishing generated packages
+
+PyPI is the distribution target for public packages. A generated repository
+publishes when a GitHub Release is published; its release tag must exactly
+match the version in `pyproject.toml`.
+
+Before the first release:
+
+1. Configure a [pending Trusted Publisher](https://docs.pypi.org/trusted-publishers/creating-a-project-through-oidc/)
+   for the package on TestPyPI if the project does not exist there yet, using
+   the repository, workflow filename `publish.yml`, and GitHub environment
+   `testpypi`.
+2. Configure the matching pending publisher on PyPI, using the same repository
+   and workflow filename with GitHub environment `pypi`. If the package
+   already exists on either index, add a regular
+   [Trusted Publisher](https://docs.pypi.org/trusted-publishers/adding-a-publisher/)
+   instead.
+3. Keep the shared workflow reference in `publish.yml.jinja` aligned with the
+   released version used in `ci.yml.jinja`.
+
+Publishing a GitHub prerelease sends its distributions to TestPyPI. Use that
+to validate the publishing path in the canary repository. Publishing a stable
+GitHub Release sends distributions to PyPI. The reusable workflow uses OIDC;
+do not add a PyPI API token to repository secrets. Because the publisher is a
+reusable workflow, verify the Trusted Publisher configuration with the canary
+before relying on production publishing.
 
 ## Releasing shared CI changes through the template
 
@@ -31,10 +61,10 @@ Copier-generated canary before publishing a stable shared-workflow tag.
    commit, for example `1.0.0-rc.1`. Mark it as a prerelease on GitHub. Never
    move or reuse a published tag.
 3. Create and push a feature branch in `eed_package_template`. Update the
-   shared-workflow references in `ci.yml.jinja` to the candidate tag. Keep the
-   generated ruleset's required status-check names aligned with the generated
-   CI jobs. Do not change `template-ci.yml` for a shared-workflow release; it
-   remains independent of `eed_gha_workflows`.
+   shared-workflow references in `ci.yml.jinja` and `publish.yml.jinja` to the
+   candidate tag. Keep the generated ruleset's required status-check names
+   aligned with the generated CI jobs. Do not change `template-ci.yml` for a
+   shared-workflow release; it remains independent of `eed_gha_workflows`.
 4. Run the template's Copier-validation workflow on the PR. In the dedicated
    `eed_gha_workflow_testing` repository, update from the pushed template
    branch:
@@ -48,8 +78,9 @@ Copier-generated canary before publishing a stable shared-workflow tag.
 5. After the candidate passes, create the stable shared-workflow tag (for
    example, `1.0.0`) on the same commit as the successful candidate tag. Do
    not rename or move the prerelease tag. Update the template branch
-   references in `ci.yml.jinja` from the candidate tag to the stable tag,
-   then repeat the template and canary validation from that branch.
+   references in `ci.yml.jinja` and `publish.yml.jinja` from the candidate
+   tag to the stable tag, then repeat the template and canary validation from
+   that branch.
 6. Once the stable shared-workflow reference passes in the canary, merge the
    template PR and wait for Copier-validation CI to pass on `main`.
 7. Create a template prerelease tag on the tested template `main` commit, such

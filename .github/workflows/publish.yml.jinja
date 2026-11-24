@@ -1,0 +1,15 @@
+name: publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    name: Publish release distributions
+    uses: EED-Solutions/eed_gha_workflows/.github/workflows/callable_publish_pypi.yml@1.0.0
+    with:
+      publish_to_testpypi: {% raw %}${{ github.event.release.prerelease }}{% endraw %}
+    permissions:
+      contents: read
+      id-token: write
