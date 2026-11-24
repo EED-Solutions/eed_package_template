@@ -55,6 +55,7 @@ github_org:
 # ---- what not to copy into generated projects ----------------------------
 _exclude:
   - "copier.yml"
+  - "CONTRIBUTING.md"
   - ".git"
   - ".github/workflows/template-ci.yml"
   - ".venv"
