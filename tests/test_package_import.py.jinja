@@ -1,0 +1,9 @@
+import importlib
+
+
+def test_package_import() -> None:
+    """Test importing the generated package."""
+    package_name = "{{ package_slug }}"
+    package = importlib.import_module(package_name)
+
+    assert package.__name__ == package_name

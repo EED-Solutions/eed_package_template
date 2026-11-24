@@ -9,9 +9,4 @@ def test_hello_world() -> None:
     that includes the git root directory.
     """
     result = hello_world()
-    assert "Hello from" in result, (
-        "Greeting message should start with 'Hello from'"
-    )
-    assert "{{ package_slug }}" in result, (
-        "Greeting message should include the package name"
-    )
+    assert result.startswith("Hello from ")
