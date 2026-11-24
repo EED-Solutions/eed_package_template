@@ -1,0 +1,12 @@
+from {{ package_slug }} import hello_world
+
+
+def test_hello_world() -> None:
+    """
+    Test the hello_world function.
+
+    This test verifies that the hello_world function returns a greeting message
+    that includes the git root directory.
+    """
+    result = hello_world()
+    assert result.startswith("Hello from ")

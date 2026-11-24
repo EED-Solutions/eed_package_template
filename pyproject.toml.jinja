@@ -1,7 +1,7 @@
 [project]
-name = "eed-package-template"
-version = "0.2.0"
-description = "Add your description here"
+name = "{{ project_name }}"
+version = "{{ package_version }}"
+description = "{{ description }}"
 readme = "README.md"
 authors = [
     { name = "EED85", email = "eric.brahmann@eed-solutions.de" }
@@ -24,7 +24,7 @@ dev = [
 ]
 
 [project.scripts]
-hello_world = "eed_package_template.hello_world:hello_world"
+hello_world = "{{ package_slug }}.hello_world:hello_world"
 
 [tool.ruff]
 # Set the maximum line length to 79.
