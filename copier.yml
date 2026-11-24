@@ -56,7 +56,7 @@ github_org:
 _exclude:
   - "copier.yml"
   - ".git"
-  - ".github/workflows/update_eed_basic_utils.yml"
+  - ".github/workflows/template-ci.yml"
   - ".venv"
   - ".pytest_cache"
   - ".ruff_cache"

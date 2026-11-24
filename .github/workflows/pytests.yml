@@ -1,7 +1,0 @@
-name: pytests
-
-on:
-    workflow_dispatch:
-jobs:
-    pytests:
-      uses: EED-Solutions/eed_gha_workflows/.github/workflows/callable_pytests.yml@main

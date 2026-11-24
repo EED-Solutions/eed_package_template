@@ -1,0 +1,18 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  ruff:
+    uses: EED-Solutions/eed_gha_workflows/.github/workflows/callable_ruff.yml@v1.0.0
+  pytests:
+    uses: EED-Solutions/eed_gha_workflows/.github/workflows/callable_pytests.yml@v1.0.0
+  pytests-cov:
+    uses: EED-Solutions/eed_gha_workflows/.github/workflows/callable_pytests_cov.yml@v1.0.0
+    with:
+      package_name: "{{ package_slug }}"

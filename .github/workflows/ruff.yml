@@ -1,8 +1,0 @@
-name: ruff
-
-on:
-  workflow_dispatch:
-
-jobs:
-  ruff:
-    uses: EED-Solutions/eed_gha_workflows/.github/workflows/callable_ruff.yml@main

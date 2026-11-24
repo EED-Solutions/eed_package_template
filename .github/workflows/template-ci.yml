@@ -1,4 +1,4 @@
-name: ci
+name: validate-copier-template
 
 on:
   push:
@@ -14,9 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "checkout repository"
-        uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout_code@main
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout_code@v1.0.0
       - name: "install uv"
-        uses: EED-Solutions/eed_gha_workflows/.github/actions/install_uv@main
+        uses: EED-Solutions/eed_gha_workflows/.github/actions/install_uv@v1.0.0
         with:
             python-version: "3.13"
             version-file: ''
@@ -37,11 +37,11 @@ jobs:
         run: |
           cd "${rendered_dir}"
           uv sync --locked
-      - name: "run generated tests"
+      - name: "run generated tests with coverage"
         shell: bash
         run: |
           cd "${rendered_dir}"
-          uv run pytest -q
+          uv run pytest --cov=eed_ci_template --cov-fail-under=90 --cov-report=term-missing tests
       - name: "run generated lint"
         shell: bash
         run: |
