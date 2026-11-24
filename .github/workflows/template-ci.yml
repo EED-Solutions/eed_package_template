@@ -14,12 +14,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "checkout repository"
-        uses: EED-Solutions/eed_gha_workflows/.github/actions/checkout_code@v1.0.0
+        uses: actions/checkout@v4
       - name: "install uv"
-        uses: EED-Solutions/eed_gha_workflows/.github/actions/install_uv@v1.0.0
+        uses: astral-sh/setup-uv@v7
         with:
-            python-version: "3.13"
-            version-file: ''
+          python-version: "3.13"
+          enable-cache: true
       - name: "render template"
         shell: bash
         run: |

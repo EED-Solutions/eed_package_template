@@ -7,7 +7,8 @@ and is excluded from generated repositories.
 ## CI workflow roles
 
 - `template-ci.yml` runs in this repository. It renders a sample project and
-  validates the generated project.
+  validates the generated project. It uses standard external setup actions
+  and does not depend on `eed_gha_workflows`.
 - `ci.yml.jinja` renders as `.github/workflows/ci.yml` in generated
   repositories. That workflow calls the reusable Ruff, pytest, and coverage
   workflows in
@@ -30,9 +31,10 @@ Copier-generated canary before publishing a stable shared-workflow tag.
    commit, for example `1.0.0-rc.1`. Mark it as a prerelease on GitHub. Never
    move or reuse a published tag.
 3. Create and push a feature branch in `eed_package_template`. Update the
-   shared-workflow references in both `ci.yml.jinja` and `template-ci.yml` to
-   the candidate tag. Keep the generated ruleset's required status-check
-   names aligned with the generated CI jobs.
+   shared-workflow references in `ci.yml.jinja` to the candidate tag. Keep the
+   generated ruleset's required status-check names aligned with the generated
+   CI jobs. Do not change `template-ci.yml` for a shared-workflow release; it
+   remains independent of `eed_gha_workflows`.
 4. Run the template's Copier-validation workflow on the PR. In the dedicated
    `eed_gha_workflow_testing` repository, update from the pushed template
    branch:
@@ -46,8 +48,8 @@ Copier-generated canary before publishing a stable shared-workflow tag.
 5. After the candidate passes, create the stable shared-workflow tag (for
    example, `1.0.0`) on the same commit as the successful candidate tag. Do
    not rename or move the prerelease tag. Update the template branch
-   references from the candidate tag to the stable tag, then repeat the
-   template and canary validation from that branch.
+   references in `ci.yml.jinja` from the candidate tag to the stable tag,
+   then repeat the template and canary validation from that branch.
 6. Once the stable shared-workflow reference passes in the canary, merge the
    template PR and wait for Copier-validation CI to pass on `main`.
 7. Create a template prerelease tag on the tested template `main` commit, such
